@@ -7,3 +7,9 @@ Learning the PHP syntax by converting javascript code into PHP with the same fun
 ## 2. Data sharing
 Introduction to `$_POST` `$_GET` `$_COOKIE` and their interaction with forms. <br>
 [Result](https://github.com/gertvandormael/learning-php/tree/master/exercises/2.data-sharing)
+
+## 3. Debugging
+Learning how to debug and solve problems. <br>
+[Result](https://github.com/gertvandormael/learning-php/blob/master/exercises/3.debugging/test.php)
+
+## 4. Classes
