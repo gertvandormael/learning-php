@@ -13,3 +13,5 @@ Learning how to debug and solve problems. <br>
 [Result](https://github.com/gertvandormael/learning-php/blob/master/exercises/3.debugging/test.php)
 
 ## 4. Classes
+Creating a blackjack game using OOP. <br>
+[Result](https://github.com/gertvandormael/learning-php/blob/master/exercises/4.classes/)
