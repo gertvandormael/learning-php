@@ -1,0 +1,16 @@
+.terminal {
+    width: 400px;
+    height: 400px;
+}
+
+.history {
+    height: 150px; 
+    padding: 5px;
+    border: 1px solid black;
+    overflow: auto;
+}
+
+input {
+    width: 390px;
+    margin-left: 5px;
+}
