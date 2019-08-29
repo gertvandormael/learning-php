@@ -1,16 +1,46 @@
 .terminal {
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    color: #ffffff;
+    font-family: Consolas, monaco, monospace;
+    font-size: 16px;
 }
-
-.history {
-    height: 150px; 
+    
+#history {
+    height: 300px; 
     padding: 5px;
-    border: 1px solid black;
+    background-color: #2d0922;
     overflow: auto;
 }
 
+ul {
+    margin-top: -5px;
+    padding: 5px;
+    list-style-type: none;
+}
+
 input {
-    width: 390px;
     margin-left: 5px;
+    font-size: 16px;
+    width: auto;
+    border: none;
+    background-color: #2d0922;
+    color: #ffffff;
+    font-family: Consolas, monaco, monospace;
+}
+
+input:focus {
+    outline: none;
+}
+
+.command {
+    display: flex;
+
+}
+
+.green {
+    color: #8ae133;
+}
+
+.blue {
+    color: #6691c7;
 }

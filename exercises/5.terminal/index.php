@@ -4,7 +4,7 @@ $terminal = new Terminal();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,23 +15,33 @@ $terminal = new Terminal();
 
 <body>
     <div class="terminal">
-        <div class="history">
+        <div id="history">
             <ul>
                 <?php
                     if (isset($_POST["command"])) {
                         $terminal->terminalHistory();
                         $terminal->executeCommand();
-
                     }
                 ?>
+                <form action="" method="post">
+                    <div class="command">
+                        <div><?php echo $terminal->info." ";?></div>
+                        <input type="text" name="command" id="command" autocomplete="off" autofocus>
+                    </div>
+                </form>
             </ul>
         </div>
-        <div class="command">
-            <form action="" method="post">
-                <input type="text" name="command" autocomplete="off">
-            </form>
-        </div>
     </div>
+
+    <script>
+        document.body.onload = function () {
+            let history = document.getElementById('history');
+            history.scrollTop = history.scrollHeight;
+        };
+        document.addEventListener("click", function () {
+            document.getElementById("command").focus();
+        });
+    </script>
 </body>
 
 </html>

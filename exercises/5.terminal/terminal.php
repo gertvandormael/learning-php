@@ -5,11 +5,11 @@
             "cd" => "change directory",
             "ls" => "show list of all files and directories", 
         ];
-        public $commandAndResponse;
+        public $info = "<span class='green'> gert@gert-HP-EliteBook-840-G1</span>:<span class='blue'>~</span>$ ";
 
         function executeCommand() {
             if (in_array($_POST["command"], $this->commandArray)) {
-                $commandAndResponse = "<li>".$_POST["command"].": ".$this->responseArray[$_POST["command"]]."</li>";
+                $commandAndResponse = $this->info.$_POST["command"]."<br>".$this->responseArray[$_POST["command"]];
             } else if ($_POST["command"] == "help") {
                 echo "<li>"."available commands: ";
                 foreach($this->commandArray as $key => $value) {
@@ -18,28 +18,42 @@
                 echo "</li>";
             } else if ($_POST["command"] == "clear") {
                 $this->clearTerminalHistory();
-                $commandAndResponse = "";
             } else {
-                $commandAndResponse = "<li>".$_POST["command"].": command not found"."</li>";
+                $commandAndResponse = $this->info.$_POST["command"].": command not found";
             }
-            echo $commandAndResponse;
-            $commandHistory[] = $commandAndResponse;
-            // print_r($_SESSION["commandHistory"]);
-            setcookie("history", $commandAndResponse);
+
+            echo "<li>".$commandAndResponse."</li>";
+            
+            // if the cookie exists, read it and unserialize it
+            if(array_key_exists("history", $_COOKIE)) {
+                $cookie = $_COOKIE["history"];
+                $cookie = unserialize($cookie);
+            }
+            
+            // add the value to the array and serialize
+            $cookie[] = $commandAndResponse;
+            $cookie = serialize($cookie);
+            // save the cookie
+            setcookie("history", $cookie, time()+3600);  
         }
         
-    
+        function setHistoryCookie() {
+        }
+
         function terminalHistory() {
-            if (isset($_COOKIE["history"])){ 
-                echo $_COOKIE["history"]; 
+            if ($_COOKIE["history"] != ""){ 
+                foreach(unserialize($_COOKIE["history"]) as $key => $value) {
+                    echo "<li>".$value."</li>";
+                }
             }
         }
 
         function clearTerminalHistory() {
-            unset($_COOKIE["history"]);
-            unset($_SESSION["commandHistory"]);  
-            header("Refresh:0");      
+            if (isset($_COOKIE["history"])) {
+                unset($_COOKIE["history"]);
+                setcookie("history", '', time() - 3600, '/');
+            }
+            header("Refresh:0");
         }
-    
     }
 ?>
