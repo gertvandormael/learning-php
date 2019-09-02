@@ -4,7 +4,7 @@ $terminal = new Terminal();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,11 @@ $terminal = new Terminal();
                 ?>
                 <form action="" method="post">
                     <div class="command">
-                        <div><?php echo $terminal->info." ";?></div>
+                        <div>
+                            <?php
+                                echo $terminal->infoComputer . $_SESSION["infoDirectory"];
+                            ?>
+                        </div>
                         <input type="text" name="command" id="command" autocomplete="off" autofocus>
                     </div>
                 </form>

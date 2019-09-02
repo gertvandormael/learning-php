@@ -1,25 +1,45 @@
 <?php
+session_start();
     class Terminal {
-        public $commandArray = ["cd", "ls"];
+        public $commandArray = ["cd", "ls", "touch", ""];
         public $responseArray = [
             "cd" => "change directory",
-            "ls" => "show list of all files and directories", 
+            "ls" => "show list of all files and directories",
+            "touch" => "make a new file",
+            "" => "",
         ];
-        public $info = "<span class='green'> gert@gert-HP-EliteBook-840-G1</span>:<span class='blue'>~</span>$ ";
-
+        
+        public $infoComputer = "<span class='green'> gert@gert-HP-EliteBook-840-G1</span>:";
+        
         function executeCommand() {
-            if (in_array($_POST["command"], $this->commandArray)) {
-                $commandAndResponse = $this->info.$_POST["command"]."<br>".$this->responseArray[$_POST["command"]];
-            } else if ($_POST["command"] == "help") {
+            // $_SESSION["infoDirectory"] = "<span class='blue'>~</span>$ ";
+            if ($_POST["command"] === "help") {
                 echo "<li>"."available commands: ";
-                foreach($this->commandArray as $key => $value) {
+                foreach ($this->commandArray as $key => $value) {
                     echo $value." ";
                 }
                 echo "</li>";
-            } else if ($_POST["command"] == "clear") {
+            } else if ($_POST["command"] === "clear") {
                 $this->clearTerminalHistory();
+                $_SESSION["infoDirectory"] = "<span class='blue'>~</span>$ ";
+                $commandAndResponse = $this->infoComputer.$_SESSION["infoDirectory"];
+            } else if (substr($_POST["command"], 0, 5) === "cd ./") {
+                $_SESSION["infoDirectory"] = "<span class='blue'>~" . substr($_POST["command"], 4, strlen($_POST["command"])) . " </span>$";
+            } else if (substr($_POST["command"], 0, 5) === "touch") {
+                $_SESSION["lsArray"][] = substr($_POST["command"], 5, strlen($_POST["command"]));
+                $commandAndResponse = $this->infoComputer.$_SESSION["infoDirectory"].$_POST["command"];
+            } else if ($_POST["command"] === "ls") {
+                foreach ($_SESSION["lsArray"] as $key => $value) {
+                    echo $value;
+                }
+                $commandAndResponse = $this->infoComputer.$_SESSION["infoDirectory"].$_POST["command"];
+            } else if ($_POST["command"] === "cd ..") {
+                $_SESSION["infoDirectory"] = "<span class='blue'>~</span>$ ";
+                $commandAndResponse = $this->infoComputer.$_SESSION["infoDirectory"];
+            } else if (in_array($_POST["command"], $this->commandArray)) {
+                $commandAndResponse = $this->infoComputer.$_SESSION["infoDirectory"].$_POST["command"]."<br>".$this->responseArray[$_POST["command"]];
             } else {
-                $commandAndResponse = $this->info.$_POST["command"].": command not found";
+                $commandAndResponse = $this->infoComputer.$_SESSION["infoDirectory"].$_POST["command"].": command not found";
             }
 
             echo "<li>".$commandAndResponse."</li>";
@@ -37,9 +57,6 @@
             setcookie("history", $cookie, time()+3600);  
         }
         
-        function setHistoryCookie() {
-        }
-
         function terminalHistory() {
             if ($_COOKIE["history"] != ""){ 
                 foreach(unserialize($_COOKIE["history"]) as $key => $value) {
@@ -49,11 +66,11 @@
         }
 
         function clearTerminalHistory() {
+            header("Refresh:0");
             if (isset($_COOKIE["history"])) {
                 unset($_COOKIE["history"]);
                 setcookie("history", '', time() - 3600, '/');
             }
-            header("Refresh:0");
         }
     }
 ?>

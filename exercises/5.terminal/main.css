@@ -1,5 +1,5 @@
 .terminal {
-    width: 600px;
+    width: 800px;
     color: #ffffff;
     font-family: Consolas, monaco, monospace;
     font-size: 16px;
@@ -34,7 +34,6 @@ input:focus {
 
 .command {
     display: flex;
-
 }
 
 .green {
