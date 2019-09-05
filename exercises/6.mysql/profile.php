@@ -1,11 +1,37 @@
 <?php
 include "connection.php";
-
-// Create connection
 $conn = openConnectionLocal();
-// $conn = openConnectionServer();
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$link=$_GET["username"];
+$sql = "SELECT * FROM hopper_2 WHERE username='$link'";
+$result = $conn->query($sql);
+
+while($row = $result->fetch_array()) {
+    $first_name = $row["first_name"];
+    $last_name = $row["last_name"];
+    $username = $row["username"];
+    $linkedin = $row["linkedin"];
+    $github = $row["github"];
+    $preferred_language = $row["preferred_language"];
+    $avatar = $row["avatar"];
+    $video = $row["video"];
+    $password = $row["password"];
+}
+
+if ($_SESSION["username"] == $username) {
+    echo "you can edit";
+    echo "<form action='' method='post'>";
+    echo "<input type='submit' name='delete' value='delete'>";
+    echo "<input type='submit' name='edit' value='edit'>";
+    echo "</form>";
+    
+} else {
+    echo "you can't edit";
+}
+
+if (isset($_POST["delete"])) {
+    echo "delete";
+    $sql_delete = "DELETE FROM hopper_2 WHERE username='$username'";
+    $conn->query($sql_delete);
 }
 ?>
 
@@ -18,43 +44,22 @@ if ($conn->connect_error) {
     <title>Profile page</title>
 </head>
 <body>
+    <div class="profile">
+        first name: <?php echo $first_name?> <br>
+        last name: <?php echo $last_name?> <br>
+        linkedin: <?php echo $linkedin?> <br>
+        github: <?php echo $github?> <br>
+        language: <?php echo $preferred_language?>
+        <?php 
+            $lang = strtolower($preferred_language);
+            if ($lang == "nl") {
+                echo "<img src='./$lang.svg' height='10px' width='10px'></img><br>";
+            }
+        ?>
 
-<?php
-
-$link=$_GET["username"];
-$sql = "SELECT * FROM hopper_2 WHERE username='$link'";
-$result = $conn->query($sql);
-
-while($row = $result->fetch_array()) {
-    $first_name = $row["first_name"];
-    $last_name = $row["last_name"];
-    $linkedin = $row["linkedin"];
-    $github = $row["github"];
-    $preferred_language = $row["preferred_language"];
-    $avatar = $row["avatar"];
-    $video = $row["video"];
-    $password = $row["password"];
-}
-?>
-
-<div class="profile">
-    first name: <?php echo $first_name?> <br>
-    last name: <?php echo $last_name?> <br>
-    linkedin: <?php echo $linkedin?> <br>
-    github: <?php echo $github?> <br>
-    language: <?php echo $preferred_language?>
-    <?php 
-    $lang = strtolower($preferred_language);
-        if ($lang == "nl") {
-            echo "<img src='./$lang.svg' height='10px' width='10px'></img><br>";
-        }
-    ?>
-    
-    avatar: <img src="<?php echo $avatar ?>" height="50px" width="50px" alt="avatar"> <br>
-    video: <?php echo $video ?>
-    <img src="https://belikebill.ga/billgen-API.php?default=1&name=<?php echo $first_name ?>&sex=f" /> 
-
-</div>
-
+        avatar: <img src="<?php echo $avatar ?>" height="50px" width="50px" alt="avatar"> <br>
+        video: <?php echo $video ?>
+        <img src="https://belikebill.ga/billgen-API.php?default=1&name=<?php echo $first_name ?>&sex=f">
+    </div>
 </body>
 </html>

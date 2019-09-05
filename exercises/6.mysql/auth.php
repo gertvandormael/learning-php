@@ -86,19 +86,16 @@ if (isset($_POST["login"])) {
         $password_login = md5($password_login);
         $sql_login = "SELECT * FROM hopper_2 WHERE username='$username_login' AND password='$password_login'";
         $result_login = $conn->query($sql_login);
-        print_r($result_login);
         if (mysqli_num_rows($result_login) == 1) {
             echo "you exist";
             $_SESSION["username"] = $username_login;
             $_SESSION["success"] = "You are now logged in";
             header("Location: index.php");
         } else {
-            echo "you don't exist";
+            echo "wrong username or password";
         }
     } else {
         print_r($error_login);
     }
 }
-
-
 ?>
