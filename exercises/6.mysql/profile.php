@@ -1,6 +1,6 @@
 <?php
 include "connection.php";
-$conn = openConnectionLocal();
+$conn = openConnection();
 $link=$_GET["username"];
 $sql = "SELECT * FROM hopper_2 WHERE username='$link'";
 $result = $conn->query($sql);
@@ -18,20 +18,40 @@ while($row = $result->fetch_array()) {
 }
 
 if ($_SESSION["username"] == $username) {
-    echo "you can edit";
-    echo "<form action='' method='post'>";
-    echo "<input type='submit' name='delete' value='delete'>";
-    echo "<input type='submit' name='edit' value='edit'>";
-    echo "</form>";
-    
+    echo "<form action='' method='post'>".
+    "<input type='submit' name='delete' value='delete'>".
+    "</form>".
+    "<form action='edit.php?username=$username' method='post'>".
+    "<input type='submit' name='edit' value='edit'>".
+    "</form>";
 } else {
     echo "you can't edit";
 }
 
 if (isset($_POST["delete"])) {
-    echo "delete";
-    $sql_delete = "DELETE FROM hopper_2 WHERE username='$username'";
-    $conn->query($sql_delete);
+    echo "<form action='' method='post'>".
+    "<div>Enter your login credentials to delete</div>".
+    "<label for=''>username</label>".
+    "<input type='text' name='username' placeholder='username' required><br>".
+    "<label for=''>password</label>".
+    "<input type='text' name='password' placeholder='password' required><br>".
+    "<input type='submit' name='confirm_delete' value='delete'>".
+    "</form>";
+}
+
+if (isset($_POST["confirm_delete"])) {
+    $username_login = $conn->real_escape_string($_POST["username"]);
+    $password_login = $conn->real_escape_string($_POST["password"]);
+    $password_login = md5($password_login);
+    $sql_login = "SELECT * FROM hopper_2 WHERE username='$username_login' AND password='$password_login'";
+    $result_login = $conn->query($sql_login);
+    if (mysqli_num_rows($result_login) == 1) {
+        $sql_delete = "DELETE FROM hopper_2 WHERE username='$username'";
+        $conn->query($sql_delete);
+        header("location: ./register.php");
+    } else {
+        echo "your login information is incorrect, try again";
+    }
 }
 ?>
 

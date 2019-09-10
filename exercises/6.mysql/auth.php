@@ -1,6 +1,6 @@
 <?php
 include "connection.php";
-$conn = openConnectionLocal();
+$conn = openConnection();
 $sql = $sql = "SELECT * FROM hopper_2";
 $result = $conn->query($sql);
 
